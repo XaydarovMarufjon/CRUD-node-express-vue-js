@@ -28,8 +28,9 @@ new Vue({
         }
     },
     methods :{
-        createContact(){
+    async  createContact(){
             const {...contact} = this.form;
+            const response =  await request( "/api/contacts" , "POST" , contact)
             this.contacts.push({...contact , id: Date.now() , marked : false}) //  Date.now() unikallikni saqlaydi
             this.form.name = this.form.value =  ""
         } ,
@@ -57,15 +58,18 @@ async function request(url , method = "GET" , data = null) {
        if (data) {
         headers["Content-Type"] = "application.json";
         body = JSON.stringify(data);
+    
        }
+      
        const response = await fetch(url , {
         method, 
         headers ,
         body
-       }) 
+       }) ;;
+
        return await response.json()
     }catch (e){
-        console.log("error" , e.message);
+        console.log("Error" , e.message);
     }
 }
 
